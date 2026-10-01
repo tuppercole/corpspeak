@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Phrase Generator</title>
+</head>
+<body>
+  <h1>Phrase Generator</h1>
+
+  <p id="phrase">Click the button to get a phrase.</p>
+  <button id="phraseButton">Get Phrase</button>
+
+  <script>
+    let phrases = [];
+
+    // Load the phrases from the separate file
+    fetch("phrases.json")
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Could not load phrases.json");
+        }
+        return response.json();
+      })
+      .then(data => {
+        phrases = data;
+      })
+      .catch(error => {
+        console.error(error);
+        document.getElementById("phrase").textContent =
+          "There was a problem loading the phrases.";
+      });
+
+    document.getElementById("phraseButton").addEventListener("click", () => {
+      if (phrases.length === 0) {
+        document.getElementById("phrase").textContent =
+          "The phrases are still loading.";
+        return;
+      }
+
+      const randomIndex = Math.floor(Math.random() * phrases.length);
+      document.getElementById("phrase").textContent = phrases[randomIndex];
+    });
+  </script>
+</body>
+</html>
